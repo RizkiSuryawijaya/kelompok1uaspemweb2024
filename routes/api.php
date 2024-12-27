@@ -19,6 +19,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('admin/deleteProduk/{id}', [ApiAdminProductController::class, 'destroy']);
 
     // user api
+    Route::post('user/logout', [ApiAdminUserController::class, 'apiLogout']);
     Route::post("user/addToCart/{id}", [ApiAdminUserController::class, 'addToCart']);
     Route::get("user/showCart", [ApiAdminUserController::class, 'showCart']);
     Route::post("user/updateQuantity/{id}", [ApiAdminUserController::class, 'updateQuantity']);

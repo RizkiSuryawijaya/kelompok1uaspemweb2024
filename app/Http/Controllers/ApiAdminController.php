@@ -44,4 +44,23 @@ class ApiAdminController extends Controller
             return response()->json(['message' => 'An error occurred during login'], 500);
         }
     }
+
+    public function apiLogout(Request $request)
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            Log::error('User not authenticated. Token: ' . $request->bearerToken());
+            return response()->json([
+                'message' => 'No authenticated user found.',
+            ], 401);
+        }
+
+        $user->currentAccessToken()->delete();
+        return response()->json([
+            'message' => 'Logout successful',
+        ], 200);
+    }
+    
+
 }

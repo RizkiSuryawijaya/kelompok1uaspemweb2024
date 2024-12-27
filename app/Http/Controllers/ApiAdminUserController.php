@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Validation\ValidationException;
 use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
+Use Illuminate\Support\Facades\Log;
 
 class ApiAdminUserController extends Controller
 {
@@ -62,6 +63,7 @@ class ApiAdminUserController extends Controller
         ], 200);
     }
 
+
     public function apiUserRegister(Request $request)
     {
         $request->validate([
@@ -85,6 +87,23 @@ class ApiAdminUserController extends Controller
         ], 201);
     }
 
+    // User Logout 
+    public function apiLogout(Request $request)
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            Log::error('User not authenticated. Token: ' . $request->bearerToken());
+            return response()->json([
+                'message' => 'No authenticated user found.',
+            ], 401);
+        }
+
+        $user->currentAccessToken()->delete();
+        return response()->json([
+            'message' => 'Logout successful',
+        ], 200);
+    }
     // user api
     public function addToCart(Request $request, $id)
     {
